@@ -5,42 +5,41 @@ import Head from 'next/head';
 
 import { ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai";
 import styles from '@/styles/Home.module.css';
-import prompt from '@/systemPrompt';
+import prompt from '@/utils/systemPrompt';
 
 export default function Home() {
   const defaultMessages: ChatCompletionRequestMessage[] = [
     { role: ChatCompletionRequestMessageRoleEnum.System, content: prompt },
-    { role: ChatCompletionRequestMessageRoleEnum.Assistant, content: "Hello I'm a sales assistant for a Popular Bookstores Malaysia we sell books online. How can I help you?" },
+    { role: ChatCompletionRequestMessageRoleEnum.Assistant, content: "Hello I'm a sales assistant for a Popular Bookstores Malaysia. How can I help you?" },
   ];
 
   const [chatLog, setChatLog] = useState<ChatCompletionRequestMessage[]>(defaultMessages);
   const [chatBox, setChatBox] = useState<string>("");
+  const [isPromptHidden, setIsPromptHidden] = useState<boolean>(false);
 
   const generatePrompt = async () => {
-    const configuration = new Configuration({
-      organization: process.env.organization,
-      apiKey: process.env.apiKey,
-    });
-    const openai = new OpenAIApi(configuration);
-
     const clientMessage: ChatCompletionRequestMessage = { role: ChatCompletionRequestMessageRoleEnum.User, content: chatBox };
     let messages: ChatCompletionRequestMessage[] = [...chatLog, clientMessage];
     setChatLog(messages);
     setChatBox("");
 
-    openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages,
-    }).then((response) => {
-      console.log(response.data);
-      if (!response.data.choices[0].message) {
-        return;
-      }
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ messages })
+    })
+      .then(response => response.json())
+      .catch(error => console.error(error));
 
-      const { role, content } = response.data.choices[0].message;
-      messages = [...messages, { role, content }];
-      setChatLog(messages);
-    });
+    if (!response.choices[0].message) {
+      return;
+    }
+
+    const { role, content } = response.choices[0].message;
+    messages = [...messages, { role, content }];
+    setChatLog(messages);
   };
 
   const handleKeyDown = (event: { key: string; }) => {
@@ -49,11 +48,22 @@ export default function Home() {
     }
   };
 
+  const test = async () => {
+    const response = await fetch('/api/test', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(response => response.json())
+      .catch(error => console.error(error));
+  }
+
   const ChatLog = () => {
     return (
       <Grid container rowSpacing={5} spacing={2}>
         {chatLog.map((message, index) => (
-          <Grid item xs={12} key={index}>
+          <Grid item xs={12} key={index} className={index === 0 && isPromptHidden ? "hidden" : ""}>
             <Grid container spacing={2}>
               <Grid item xs={1}>
                 <p>

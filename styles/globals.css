@@ -95,3 +95,7 @@ a {
     color-scheme: light;
   }
 }
+
+.hidden {
+  display: none;
+}
