@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, TextField, Button } from '@mui/material';
+import { Checkbox, Grid, TextField, Button } from '@mui/material';
 import ReactMarkdown from 'react-markdown';
 import Head from 'next/head';
 
@@ -46,6 +46,10 @@ export default function Home() {
     if (event.key === 'Enter') {
       generatePrompt();
     }
+  };
+
+  const handleChange = (event: { target: { checked: boolean; }; }) => {
+    setIsPromptHidden(event.target.checked);
   };
 
   const initDB = async () => {
@@ -107,8 +111,9 @@ export default function Home() {
           <Grid item xs={1}>
             <Button variant="contained" onClick={generatePrompt}>Send</Button>
           </Grid>
+          <Checkbox checked={isPromptHidden} onChange={handleChange} />
           <Grid item xs={1}>
-            <Button variant="contained" onClick={initDB}>initDB</Button>
+            {isPromptHidden ? null : <Button variant="contained" onClick={initDB}>initDB</Button>}
           </Grid>
         </Grid>
       </main>
