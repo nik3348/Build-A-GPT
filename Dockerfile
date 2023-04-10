@@ -1,5 +1,5 @@
 # Use a Node.js base image
-FROM node:14-alpine
+FROM node:lts-buster
 
 # Set the working directory inside the container
 WORKDIR /app
