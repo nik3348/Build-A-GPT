@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import weav from '@/utils/weaviate';
+import { createClass, getData, importData } from '@/utils/weaviate';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Message = {
@@ -11,6 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Message>
 ) {
-  weav();
+  await createClass();
+  await importData();  
   res.status(200).json({ message: 'Hello World', username: 'John Doe'});
 }

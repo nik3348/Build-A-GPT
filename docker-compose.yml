@@ -10,7 +10,7 @@ services:
     - http
     image: semitechnologies/weaviate:1.18.3
     ports:
-    - 8080:8080
+      - 8080:8080
     restart: on-failure:0
     environment:
       QUERY_DEFAULTS_LIMIT: 25
@@ -19,3 +19,17 @@ services:
       DEFAULT_VECTORIZER_MODULE: 'text2vec-openai'
       ENABLE_MODULES: 'text2vec-openai,qna-openai'
       CLUSTER_HOSTNAME: 'openai-weaviate-cluster'
+    networks:
+      - my-network
+  app:
+    build: .
+    ports:
+      - 3030:3000
+    networks:
+      - my-network
+    environment:
+      HOST: "0.0.0.0"
+
+networks:
+  my-network:
+    driver: bridge

@@ -1,0 +1,20 @@
+[
+    {
+        "bid": 1,
+        "title": "First Post",
+        "author": "John Doe",
+        "genre": "Fiction",
+        "stock": 10,
+        "price": 100,
+        "summary": "This is the first post"
+    },
+    {
+        "bid": 2,
+        "title": "Second Post",
+        "author": "John Doe",
+        "genre": "Fiction",
+        "stock": 10,
+        "price": 100,
+        "summary": "This is the second post"
+    }
+]

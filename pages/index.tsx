@@ -10,7 +10,7 @@ import prompt from '@/utils/systemPrompt';
 export default function Home() {
   const defaultMessages: ChatCompletionRequestMessage[] = [
     { role: ChatCompletionRequestMessageRoleEnum.System, content: prompt },
-    { role: ChatCompletionRequestMessageRoleEnum.Assistant, content: "Hello I'm a sales assistant for a Popular Bookstores Malaysia. How can I help you?" },
+    { role: ChatCompletionRequestMessageRoleEnum.Assistant, content: "Hello I'm a sales assistant for a Stario Bookstores Malaysia. How can I help you?" },
   ];
 
   const [chatLog, setChatLog] = useState<ChatCompletionRequestMessage[]>(defaultMessages);
@@ -33,12 +33,12 @@ export default function Home() {
       .then(response => response.json())
       .catch(error => console.error(error));
 
-    if (!response.choices[0].message) {
+    if (!response.message.choices[0].message) {
       return;
     }
 
-    const { role, content } = response.choices[0].message;
-    messages = [...messages, { role, content }];
+    const { role, content } = response.message.choices[0].message;
+    messages = [...response.history, { role, content }];
     setChatLog(messages);
   };
 
@@ -48,8 +48,8 @@ export default function Home() {
     }
   };
 
-  const test = async () => {
-    const response = await fetch('/api/test', {
+  const initDB = async () => {
+    const response = await fetch('/api/initDB', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ export default function Home() {
     return (
       <Grid container rowSpacing={5} spacing={2}>
         {chatLog.map((message, index) => (
-          <Grid item xs={12} key={index} className={index === 0 && isPromptHidden ? "hidden" : ""}>
+          <Grid item xs={12} key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && isPromptHidden ? "hidden" : ""}>
             <Grid container spacing={2}>
               <Grid item xs={1}>
                 <p>
@@ -106,6 +106,9 @@ export default function Home() {
           </Grid>
           <Grid item xs={1}>
             <Button variant="contained" onClick={generatePrompt}>Send</Button>
+          </Grid>
+          <Grid item xs={1}>
+            <Button variant="contained" onClick={initDB}>initDB</Button>
           </Grid>
         </Grid>
       </main>

@@ -3,9 +3,14 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { ChatCompletionRequestMessageRoleEnum, Configuration, CreateChatCompletionResponse, OpenAIApi } from 'openai';
 import weaviate, { WeaviateClient } from 'weaviate-ts-client';
 
+type Message = {
+  history: string;
+  message: CreateChatCompletionResponse;
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<CreateChatCompletionResponse>
+  res: NextApiResponse<Message>
 ) {
   const { messages } = req.body;
   const configuration = new Configuration({
@@ -21,13 +26,13 @@ export default async function handler(
   const oaiEmbedding = oaiResp.data.data[0].embedding;
   const client: WeaviateClient = weaviate.client({
     scheme: 'http',
-    host: 'localhost:8080',
+    host: 'weaviate:8080',
     headers: { 'X-OpenAI-Api-Key': process.env.apiKey ?? "" },
   });
   const result = await client.graphql
     .get()
-    .withClassName('Question')
-    .withFields('question answer category')
+    .withClassName('Book')
+    .withFields('bid title author genre stock price summary')
     .withNearVector({
       vector: oaiEmbedding,
       certainty: 0.7
@@ -41,15 +46,14 @@ export default async function handler(
       console.error(err)
     });
 
-  for (let i = 0; i < result.Get.Question.length; i++) {
-    messages.push({ role: ChatCompletionRequestMessageRoleEnum.System, content: `Vector Search result ${i + 1} - ${JSON.stringify(result.Get.Question[i])}` });
+  for (let i = 0; i < result.Get.Book.length; i++) {
+    messages.push({ role: ChatCompletionRequestMessageRoleEnum.System, content: `Vector Search result ${i + 1} - ${JSON.stringify(result.Get.Book[i])}` });
   }
-  console.log(messages);
 
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages,
   });
 
-  res.status(200).json(completion.data);
+  res.status(200).json({ history: messages, message: completion.data });
 }
