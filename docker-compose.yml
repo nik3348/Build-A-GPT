@@ -24,7 +24,7 @@ services:
   app:
     build: .
     ports:
-      - 3000:3000
+      - 3030:3000
     networks:
       - my-network
     environment:
