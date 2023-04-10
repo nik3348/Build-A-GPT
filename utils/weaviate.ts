@@ -1,16 +1,18 @@
 import weaviate, { ObjectsBatcher, WeaviateClient } from 'weaviate-ts-client';
-import openai, { Configuration, OpenAIApi } from 'openai';
+import Data from "../public/data.json";
 
-const weav = async () => {
-    const client: WeaviateClient = weaviate.client({
+const getClient = (): WeaviateClient => {
+    return weaviate.client({
         scheme: 'http',
-        host: 'localhost:8080',
+        host: 'weaviate:8080',
         headers: { 'X-OpenAI-Api-Key': process.env.apiKey ?? "" },
     });
+}
 
+export const createClass = async () => {
     const classObj = {
-        class: 'Question',
-        description: 'Information from a Jeopardy! question',
+        class: 'Book',
+        description: 'Information about a book in the inventory',
         vectorizer: 'text2vec-openai',
         moduleConfig: {
             'text2vec-openai': {
@@ -21,103 +23,101 @@ const weav = async () => {
         },
         properties: [
             {
-                name: 'question',
-                description: 'The question',
+                name: 'bid',
+                description: 'The bid',
+                dataType: ['int'],
+            },
+            {
+                name: 'title',
+                description: 'The title',
                 dataType: ['text'],
             },
             {
-                name: 'answer',
-                description: 'The answer',
+                name: 'author',
+                description: 'The author',
                 dataType: ['text'],
             },
             {
-                name: 'category',
-                description: 'The category',
-                dataType: ['string'],
+                name: 'genre',
+                description: 'The genre',
+                dataType: ['text'],
+            },
+            {
+                name: 'stock',
+                description: 'The stock',
+                dataType: ['int'],
+            },
+            {
+                name: 'price',
+                description: 'The price',
+                dataType: ['int'],
+            },
+            {
+                name: 'summary',
+                description: 'The summary',
+                dataType: ['text'],
             },
         ],
     };
 
-    // client
-    //     .schema
-    //     .classCreator()
-    //     .withClass(classObj)
-    //     .do()
-    //     .then((res: any) => {
-    //         console.log(res);
-    //     })
-    //     .catch((err: Error) => {
-    //         console.error(err);
-    //     });
-
-    const model = 'text-embedding-ada-002';
-
-    (async () => {
-        const configuration = new Configuration({
-            organization: process.env.organization,
-            apiKey: process.env.apiKey,
+    const client = getClient();
+    client
+        .schema
+        .classCreator()
+        .withClass(classObj)
+        .do()
+        .then((res: any) => {
+            console.log(res);
+        })
+        .catch((err: Error) => {
+            console.error(err);
         });
-        const openai = new OpenAIApi(configuration);
-        const oaiResp = await openai.createEmbedding({
-            input: ["Questions about the world"],
-            model: model
-        });
-
-        const oaiEmbedding = oaiResp.data.data[0].embedding;
-        const result = await client.graphql
-            .get()
-            .withClassName('Question')
-            .withFields('question answer category')
-            .withNearVector({
-                vector: oaiEmbedding,
-                certainty: 0.7
-            })
-            .withLimit(5)
-            .do()
-            .then((res: any) => {
-                return res.data;
-            })
-            .catch((err: Error) => {
-                console.error(err)
-            });
-
-        console.log('API response:');
-        console.log(JSON.stringify(result, null, 2));
-    })();
 }
 
-async function getJsonData(): Promise<any> {
-    const file: Response = await fetch('https://raw.githubusercontent.com/weaviate-tutorials/quickstart/main/data/jeopardy_tiny.json');
-    return file.json();
+export const getData = async () => {
+    const client = getClient();
+    client
+        .data
+        .getter()
+        .do()
+        .then((res: any) => {
+            console.log(res)
+        })
+        .catch((err: Error) => {
+            console.error(err)
+        });
 }
 
-async function importQuestions() {
+export async function importData() {
     // Get the data from the data.json file
-    const data = await getJsonData();
-    const client: WeaviateClient = weaviate.client({
-        scheme: 'http',
-        host: 'localhost:8080',
-        headers: { 'X-OpenAI-Api-Key': process.env.apiKey ?? "" },
-    });
-
+    const data = Data;
     // Prepare a batcher
+    const client = getClient();
     let batcher: ObjectsBatcher = client.batch.objectsBatcher();
     let counter: number = 0;
-    let batchSize: number = 100;
+    const batchSize: number = 100;
 
-    interface Question {
-        Answer: string;
-        Question: string;
-        Category: string;
+    interface Book {
+        bid: number;
+        title: string;
+        author: string;
+        genre: string;
+        stock: number;
+        price: number;
+        summary: string;
     }
 
-    data.forEach((question: Question) => {
+    data.forEach((book: Book) => {
         const obj = {
-            class: 'Question',
+            class: 'Book',
             properties: {
-                answer: question.Answer,
-                question: question.Question,
-                category: question.Category,
+                bid: book.bid,
+                title: book.title,
+                author: book.author,
+                genre: book.genre,
+                stock: book.stock,
+                price: book.price,
+                summary: book.summary,
             },
         }
 
@@ -152,5 +152,3 @@ async function importQuestions() {
             console.error(err)
         });
 }
-
-export default weav;
