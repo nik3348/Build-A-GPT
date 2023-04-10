@@ -1,3 +1,12 @@
+# Build A GPT
+This repo is a POC of using an LLM with vector database querying
+
+Currently its connected to GPT-3.5, but I'd like to add the choice to change to Llama, and Weaviate as a database
+
+You can use Prompt Engineer in systemPrompt.ts to customize the function of the bot
+
+Make a copy of .env as .env.local with your OpenAI api key and org
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
