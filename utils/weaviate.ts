@@ -1,7 +1,7 @@
 import weaviate, { ObjectsBatcher, WeaviateClient } from 'weaviate-ts-client';
-import Data from "../public/data.json";
+import Data from "../public/book-5.json";
 
-const getClient = (): WeaviateClient => {
+export const getClient = (): WeaviateClient => {
     return weaviate.client({
         scheme: 'http',
         host: 'weaviate:8080',
@@ -23,13 +23,18 @@ export const createClass = async () => {
         },
         properties: [
             {
-                name: 'bid',
-                description: 'The bid',
-                dataType: ['int'],
+                name: 'bookId',
+                description: 'The bookId',
+                dataType: ['text'],
             },
             {
                 name: 'title',
                 description: 'The title',
+                dataType: ['text'],
+            },
+            {
+                name: 'series',
+                description: 'The series',
                 dataType: ['text'],
             },
             {
@@ -38,24 +43,114 @@ export const createClass = async () => {
                 dataType: ['text'],
             },
             {
+                name: 'rating',
+                description: 'The rating',
+                dataType: ['text'],
+            },
+            {
+                name: 'description',
+                description: 'The description',
+                dataType: ['text'],
+            },
+            {
+                name: 'language',
+                description: 'The language',
+                dataType: ['text'],
+            },
+            {
+                name: 'isbn',
+                description: 'The isbn',
+                dataType: ['text'],
+            },
+            {
                 name: 'genre',
                 description: 'The genre',
+                dataType: ['text'],
+            },
+            {
+                name: 'characters',
+                description: 'The characters',
+                dataType: ['text'],
+            },
+            {
+                name: 'bookFormat',
+                description: 'The bookFormat',
+                dataType: ['text'],
+            },
+            {
+                name: 'edition',
+                description: 'The edition',
+                dataType: ['text'],
+            },
+            {
+                name: 'pages',
+                description: 'The number pages',
+                dataType: ['text'],
+            },
+            {
+                name: 'publisher',
+                description: 'The publisher',
+                dataType: ['text'],
+            },
+            {
+                name: 'publishDate',
+                description: 'The publishDate',
+                dataType: ['text'],
+            },
+            {
+                name: 'firstPublishDate',
+                description: 'The firstPublishDate',
+                dataType: ['text'],
+            },
+            {
+                name: 'awards',
+                description: 'The awards',
+                dataType: ['text'],
+            },
+            {
+                name: 'numRatings',
+                description: 'The numRatings',
+                dataType: ['text'],
+            },
+            {
+                name: 'ratingsByStars',
+                description: 'The ratingsByStars',
+                dataType: ['text'],
+            },
+            {
+                name: 'likedPercent',
+                description: 'The likedPercent',
+                dataType: ['text'],
+            },
+            {
+                name: 'setting',
+                description: 'The setting',
+                dataType: ['text'],
+            },
+            {
+                name: 'coverImg',
+                description: 'The coverImg',
+                dataType: ['text'],
+            },
+            {
+                name: 'bbeScore',
+                description: 'The bbeScore',
+                dataType: ['text'],
+            },
+            {
+                name: 'bbeVotes',
+                description: 'The bbeVotes',
+                dataType: ['text'],
+            },
+            {
+                name: 'price',
+                description: 'The price',
                 dataType: ['text'],
             },
             {
                 name: 'stock',
                 description: 'The stock',
                 dataType: ['int'],
-            },
-            {
-                name: 'price',
-                description: 'The price',
-                dataType: ['int'],
-            },
-            {
-                name: 'summary',
-                description: 'The summary',
-                dataType: ['text'],
             },
         ],
     };
@@ -76,13 +171,11 @@ export const createClass = async () => {
 
 export const getData = async () => {
     const client = getClient();
-    client
+    return client
         .data
         .getter()
         .do()
-        .then((res: any) => {
-            console.log(res)
-        })
+        .then((res: any) => res)
         .catch((err: Error) => {
             console.error(err)
         });
@@ -95,29 +188,67 @@ export async function importData() {
     const client = getClient();
     let batcher: ObjectsBatcher = client.batch.objectsBatcher();
     let counter: number = 0;
-    const batchSize: number = 100;
+    const batchSize: number = 1000;
 
     interface Book {
-        bid: number;
+        bookId: string;
         title: string;
+        series: string;
         author: string;
-        genre: string;
+        rating: string;
+        description: string;
+        language: string;
+        isbn: string;
+        genres: string;
+        characters: string;
+        bookFormat: string;
+        edition: string;
+        pages: string;
+        publisher: string;
+        publishDate: string;
+        firstPublishDate: string;
+        awards: string;
+        numRatings: string;
+        ratingsByStars: string;
+        likedPercent: string;
+        setting: string;
+        coverImg: string;
+        bbeScore: string;
+        bbeVotes: string;
+        price: string;
         stock: number;
-        price: number;
-        summary: string;
     }
 
-    data.forEach((book: Book) => {
+    await data.forEach((book: Book) => {
         const obj = {
             class: 'Book',
             properties: {
-                bid: book.bid,
+                bookId: book.bookId,
                 title: book.title,
+                series: book.series,
                 author: book.author,
-                genre: book.genre,
-                stock: book.stock,
+                rating: book.rating,
+                description: book.description,
+                language: book.language,
+                isbn: book.isbn,
+                genres: book.genres,
+                characters: book.characters,
+                bookFormat: book.bookFormat,
+                edition: book.edition,
+                pages: book.pages,
+                publisher: book.publisher,
+                publishDate: book.publishDate,
+                firstPublishDate: book.firstPublishDate,
+                awards: book.awards,
+                numRatings: book.numRatings,
+                ratingsByStars: book.ratingsByStars,
+                likedPercent: book.likedPercent,
+                setting: book.setting,
+                coverImg: book.coverImg,
+                bbeScore: book.bbeScore,
+                bbeVotes: book.bbeVotes,
                 price: book.price,
-                summary: book.summary,
+                stock: book.stock,
             },
         }
 
@@ -143,7 +274,7 @@ export async function importData() {
     });
 
     // Flush the remaining objects
-    batcher
+    await batcher
         .do()
         .then((res: any) => {
             console.log(res)
@@ -151,4 +282,6 @@ export async function importData() {
         .catch((err: Error) => {
             console.error(err)
         });
+
+    console.log('Done');
 }

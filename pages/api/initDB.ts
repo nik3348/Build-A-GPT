@@ -2,16 +2,18 @@
 import { createClass, getData, importData } from '@/utils/weaviate';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-type Message = {
-  message: string;
-  username: string;
-}
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Message>
+  res: NextApiResponse
 ) {
-  await createClass();
-  await importData();  
-  res.status(200).json({ message: 'Hello World', username: 'John Doe'});
+  const data = await getData();
+  console.log(data.objects[0].properties);
+
+  if (data.totalResults === undefined) {
+    console.log('Initiating DB');
+    await createClass();
+    await importData();
+  }
+
+  res.status(200).send('OK');
 }

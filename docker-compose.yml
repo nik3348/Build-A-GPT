@@ -21,6 +21,9 @@ services:
       CLUSTER_HOSTNAME: 'openai-weaviate-cluster'
     networks:
       - my-network
+    volumes:
+      - weaviate-data:/var/lib/weaviate
+
   app:
     build: .
     ports:
@@ -33,3 +36,6 @@ services:
 networks:
   my-network:
     driver: bridge
+
+volumes:
+  weaviate-data:

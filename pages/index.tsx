@@ -67,7 +67,7 @@ export default function Home() {
     return (
       <Grid container rowSpacing={5} spacing={2}>
         {chatLog.map((message, index) => (
-          <Grid item xs={12} key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && isPromptHidden ? "hidden" : ""}>
+          <Grid item xs={12} key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isPromptHidden ? "hidden" : ""}>
             <Grid container spacing={2}>
               <Grid item xs={1}>
                 <p>
@@ -113,7 +113,7 @@ export default function Home() {
           </Grid>
           <Checkbox checked={isPromptHidden} onChange={handleChange} />
           <Grid item xs={1}>
-            {isPromptHidden ? null : <Button variant="contained" onClick={initDB}>initDB</Button>}
+            {!isPromptHidden ? null : <Button variant="contained" onClick={initDB}>initDB</Button>}
           </Grid>
         </Grid>
       </main>
