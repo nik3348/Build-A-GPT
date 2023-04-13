@@ -12,7 +12,7 @@ const Header = () => {
         <Grid item xs={2}>
           The <span className={styles.readLogo}>READING</span> Corner
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <InputBase
             placeholder="Search…"
             inputProps={{ 'aria-label': 'search' }}
@@ -24,18 +24,18 @@ const Header = () => {
             }
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <IconButton aria-label="delete" className={styles.searchBar}>
             <AccountCircleIcon />
             Profile
           </IconButton>
         </Grid>
-        <Grid item xs={0}>
+        <Grid item xs={1}>
           <div className={styles.divider}>
             |
           </div>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           <IconButton aria-label="delete" className={styles.searchBar}>
             <ShoppingCartIcon />
             Cart

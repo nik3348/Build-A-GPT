@@ -1,4 +1,5 @@
 import styles from '@/styles/Home.module.css';
+import { grey } from '@mui/material/colors';
 
 type Item = {
   title: string;
@@ -10,7 +11,7 @@ type Item = {
 
 const Item = (props: { item: Item }) => {
   return (
-    <div style={{ flexDirection: 'column', flex: 1 }}>
+    <div className={styles.items}>
       <img
         src={`${props.item.img}`}
         alt={props.item.title}
@@ -54,6 +55,13 @@ const Catalog = () => {
       price: 6.67,
       rating: 4,
       author: 'Terry J. Erdmann'
+    },
+    {
+      title: 'Рубашка',
+      img: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1187031995l/1695654.jpg',
+      price: 5.99,
+      rating: 3,
+      author: 'Евгений Гришковец'
     },
   ]
 
