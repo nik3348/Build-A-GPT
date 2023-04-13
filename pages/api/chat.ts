@@ -32,7 +32,7 @@ export default async function handler(
   const result = await client.graphql
     .get()
     .withClassName('Book')
-    .withFields('bookId title series author rating description language isbn genres characters bookFormat edition pages publisher publishDate firstPublishDate awards numRatings ratingsByStars likedPercent setting coverImg bbeScore bbeVotes price stock')
+    .withFields('title author description pages coverImg price stock')
     .withNearVector({
       vector: oaiEmbedding,
       certainty: 0.7

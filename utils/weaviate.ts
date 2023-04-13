@@ -23,18 +23,8 @@ export const createClass = async () => {
         },
         properties: [
             {
-                name: 'bookId',
-                description: 'The bookId',
-                dataType: ['text'],
-            },
-            {
                 name: 'title',
                 description: 'The title',
-                dataType: ['text'],
-            },
-            {
-                name: 'series',
-                description: 'The series',
                 dataType: ['text'],
             },
             {
@@ -43,43 +33,8 @@ export const createClass = async () => {
                 dataType: ['text'],
             },
             {
-                name: 'rating',
-                description: 'The rating',
-                dataType: ['text'],
-            },
-            {
                 name: 'description',
                 description: 'The description',
-                dataType: ['text'],
-            },
-            {
-                name: 'language',
-                description: 'The language',
-                dataType: ['text'],
-            },
-            {
-                name: 'isbn',
-                description: 'The isbn',
-                dataType: ['text'],
-            },
-            {
-                name: 'genre',
-                description: 'The genre',
-                dataType: ['text'],
-            },
-            {
-                name: 'characters',
-                description: 'The characters',
-                dataType: ['text'],
-            },
-            {
-                name: 'bookFormat',
-                description: 'The bookFormat',
-                dataType: ['text'],
-            },
-            {
-                name: 'edition',
-                description: 'The edition',
                 dataType: ['text'],
             },
             {
@@ -88,58 +43,8 @@ export const createClass = async () => {
                 dataType: ['text'],
             },
             {
-                name: 'publisher',
-                description: 'The publisher',
-                dataType: ['text'],
-            },
-            {
-                name: 'publishDate',
-                description: 'The publishDate',
-                dataType: ['text'],
-            },
-            {
-                name: 'firstPublishDate',
-                description: 'The firstPublishDate',
-                dataType: ['text'],
-            },
-            {
-                name: 'awards',
-                description: 'The awards',
-                dataType: ['text'],
-            },
-            {
-                name: 'numRatings',
-                description: 'The numRatings',
-                dataType: ['text'],
-            },
-            {
-                name: 'ratingsByStars',
-                description: 'The ratingsByStars',
-                dataType: ['text'],
-            },
-            {
-                name: 'likedPercent',
-                description: 'The likedPercent',
-                dataType: ['text'],
-            },
-            {
-                name: 'setting',
-                description: 'The setting',
-                dataType: ['text'],
-            },
-            {
                 name: 'coverImg',
                 description: 'The coverImg',
-                dataType: ['text'],
-            },
-            {
-                name: 'bbeScore',
-                description: 'The bbeScore',
-                dataType: ['text'],
-            },
-            {
-                name: 'bbeVotes',
-                description: 'The bbeVotes',
                 dataType: ['text'],
             },
             {
@@ -191,30 +96,11 @@ export async function importData() {
     const batchSize: number = 1000;
 
     interface Book {
-        bookId: string;
         title: string;
-        series: string;
         author: string;
-        rating: string;
         description: string;
-        language: string;
-        isbn: string;
-        genres: string;
-        characters: string;
-        bookFormat: string;
-        edition: string;
         pages: string;
-        publisher: string;
-        publishDate: string;
-        firstPublishDate: string;
-        awards: string;
-        numRatings: string;
-        ratingsByStars: string;
-        likedPercent: string;
-        setting: string;
         coverImg: string;
-        bbeScore: string;
-        bbeVotes: string;
         price: string;
         stock: number;
     }
@@ -223,30 +109,11 @@ export async function importData() {
         const obj = {
             class: 'Book',
             properties: {
-                bookId: book.bookId,
                 title: book.title,
-                series: book.series,
                 author: book.author,
-                rating: book.rating,
                 description: book.description,
-                language: book.language,
-                isbn: book.isbn,
-                genres: book.genres,
-                characters: book.characters,
-                bookFormat: book.bookFormat,
-                edition: book.edition,
                 pages: book.pages,
-                publisher: book.publisher,
-                publishDate: book.publishDate,
-                firstPublishDate: book.firstPublishDate,
-                awards: book.awards,
-                numRatings: book.numRatings,
-                ratingsByStars: book.ratingsByStars,
-                likedPercent: book.likedPercent,
-                setting: book.setting,
                 coverImg: book.coverImg,
-                bbeScore: book.bbeScore,
-                bbeVotes: book.bbeVotes,
                 price: book.price,
                 stock: book.stock,
             },

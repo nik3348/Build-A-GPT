@@ -22,7 +22,7 @@ services:
     networks:
       - my-network
     volumes:
-      - weaviate-data:/var/lib/weaviate
+      - ./weaviate:/var/lib/weaviate
 
   app:
     build: .
@@ -36,6 +36,3 @@ services:
 networks:
   my-network:
     driver: bridge
-
-volumes:
-  weaviate-data:
