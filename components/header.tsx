@@ -8,8 +8,8 @@ import styles from '@/styles/Home.module.css';
 const Header = () => {
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={2}>
+      <Grid container spacing={2} alignItems='center' justifyContent='space-evenly'>
+        <Grid item xs={2} style={{ fontSize: '25px' }}>
           The <span className={styles.readLogo}>READING</span> Corner
         </Grid>
         <Grid item xs={6}>
@@ -24,7 +24,7 @@ const Header = () => {
             }
           />
         </Grid>
-        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid item style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <IconButton aria-label="delete" className={styles.searchBar}>
             <AccountCircleIcon />
             Profile

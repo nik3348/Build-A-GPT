@@ -5,8 +5,8 @@
   align-items: center;
   padding: 3rem;
   min-height: 100vh;
-  max-width: 1200px; /* or any other value you prefer */
-  margin: 0 auto; /* this centers the element horizontally */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .chat {
@@ -20,9 +20,28 @@
   bottom: 70px;
   right: 0;
   border-radius: 5px;
-  padding: 15px;
+  padding: 10px;
   margin: 1rem;
   z-index: 1000;
+}
+
+.chatBubbleAssistant {
+  border-radius: 5px;
+  padding: 12px;
+  margin: 10px;
+  max-width: 395px;
+  word-wrap: break-word;
+  background-color: rgb(39, 39, 39);
+}
+
+.chatBubbleUser {
+  border-radius: 5px;
+  padding: 12px;
+  margin: 10px;
+  max-width: 395px;
+  word-wrap: break-word;
+  background-color: #123123;
+  text-align: end;
 }
 
 .chatMessage {
@@ -33,7 +52,8 @@
   overflow: scroll;
   overflow-x: hidden;
   margin: 5px;
-  min-height: 500px;
+  margin-right: auto;
+  height: 500px;
 }
 
 /* width */
@@ -43,17 +63,17 @@
 
 /* Track */
 .chatLog::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
 }
- 
+
 /* Handle */
 .chatLog::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 .chatLog::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
 
 .fab {
@@ -62,6 +82,15 @@
   right: 0;
   margin: 1rem;
   z-index: 1000;
+}
+
+.subChat {
+  display: flex;
+  justify-content: center;
+  font-size: 10px;
+  padding: 15px;
+  padding-bottom: 0px;
+  opacity: 0.3;
 }
 
 .catalog {
@@ -75,15 +104,28 @@
 .catalogItems {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  margin-top: 5px;
+  min-width: 1000px
 }
 
 .items {
+  display: flex;
   flex-direction: column;
   flex: 1;
-  background-color: grey;
   border-radius: 5px;
   padding: 10px;
-  margin: 5px;
+  padding-left: 0;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 250px;
+}
+
+.text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 250px;
 }
 
 .divider {
@@ -95,15 +137,12 @@
 }
 
 .searchBar {
-  color:#ffffff;
+  color: #ffffff;
 }
 
 .carousel {
   position: relative;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  width: 90%;
   overflow: hidden;
   border-radius: var(--border-radius);
   box-shadow: 0px 2px 8px -1px #0000001a;
@@ -111,14 +150,13 @@
 }
 
 .carouselItem {
+  background-color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 300px;
+  height: 400px;
   transition: opacity 0.5s ease-in-out;
 }
 
@@ -262,11 +300,9 @@
   inset: 0;
   padding: 1px;
   border-radius: var(--border-radius);
-  background: linear-gradient(
-    to bottom right,
-    rgba(var(--tile-start-rgb), 1),
-    rgba(var(--tile-end-rgb), 1)
-  );
+  background: linear-gradient(to bottom right,
+      rgba(var(--tile-start-rgb), 1),
+      rgba(var(--tile-end-rgb), 1));
   background-clip: content-box;
 }
 
@@ -345,11 +381,9 @@
     border-radius: 0;
     border: none;
     border-bottom: 1px solid rgba(var(--callout-border-rgb), 0.25);
-    background: linear-gradient(
-      to bottom,
-      rgba(var(--background-start-rgb), 1),
-      rgba(var(--callout-rgb), 0.5)
-    );
+    background: linear-gradient(to bottom,
+        rgba(var(--background-start-rgb), 1),
+        rgba(var(--callout-rgb), 0.5));
     background-clip: padding-box;
     backdrop-filter: blur(24px);
   }
@@ -360,11 +394,9 @@
     inset: auto 0 0;
     padding: 2rem;
     height: 200px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(var(--background-end-rgb)) 40%
-    );
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        rgb(var(--background-end-rgb)) 40%);
     z-index: 1;
   }
 }
@@ -391,6 +423,7 @@
   from {
     transform: rotate(360deg);
   }
+
   to {
     transform: rotate(0deg);
   }

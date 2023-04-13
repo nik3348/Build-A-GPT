@@ -62,21 +62,47 @@ const Chat = () => {
       .catch(error => console.error(error));
   }
 
+  const assistantBubble = (message: string) => {
+    return (
+      <Grid container>
+        <Grid item xs={1} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <AccountCircleIcon fontSize="large" />
+        </Grid>
+        <Grid item xs={11}>
+          <div>
+            <div className={styles.chatBubbleAssistant}>
+              <ReactMarkdown>
+                {message}
+              </ReactMarkdown>
+            </div>
+          </div>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const userBubble = (message: string) => {
+    return (
+      <div className={styles.chatBubbleUser}>
+        <ReactMarkdown>
+          {message}
+        </ReactMarkdown>
+      </div>
+    );
+  };
+
   const ChatLog = () => {
     return (
-      <Grid container rowSpacing={5}>
+      <Grid
+        container
+        rowSpacing={1}
+        direction='column'
+        justifyContent='end'
+        alignItems='flex-end'
+      >
         {chatLog.map((message, index) => (
-          <Grid item xs={12} key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isPromptHidden ? "hidden" : ""}>
-            <Grid container>
-              <Grid item xs={2}>
-                <AccountCircleIcon fontSize="large" />
-              </Grid>
-              <Grid item xs={10}>
-                <ReactMarkdown>
-                  {message.content}
-                </ReactMarkdown>
-              </Grid>
-            </Grid>
+          <Grid item key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isPromptHidden ? "hidden" : ""}>
+            {message.role === ChatCompletionRequestMessageRoleEnum.User ? userBubble(message.content) : assistantBubble(message.content)}
           </Grid>
         ))}
       </Grid>
@@ -97,10 +123,11 @@ const Chat = () => {
                 autoComplete='off'
                 id="standard-basic"
                 color="primary"
+                placeholder='Enter you message here'
                 value={chatBox}
                 onChange={(event) => { setChatBox(event.target.value) }}
                 onKeyDown={handleKeyDown}
-                inputProps={{ 'aria-label': 'Enter message' }}
+                inputProps={{ 'aria-label': 'Enter you message here' }}
                 style={{ color: '#ffffff', backgroundColor: '#78797a', borderRadius: '4px', padding: '3px 5px' }}
               />
             </Grid>
@@ -112,6 +139,7 @@ const Chat = () => {
             {!isPromptHidden ? null : <Button variant="contained" onClick={initDB}>initDB</Button>}
           </Grid> */}
           </Grid>
+          <div className={styles.subChat}>Powered by GPT3.5</div>
         </div>
       </div>
     </>
