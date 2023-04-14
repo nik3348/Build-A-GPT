@@ -19,7 +19,7 @@ const Chat = (props: Chat) => {
 
   const [chatLog, setChatLog] = useState<ChatCompletionRequestMessage[]>(defaultMessages);
   const [chatBox, setChatBox] = useState<string>("");
-  const [isPromptHidden, setIsPromptHidden] = useState<boolean>(false);
+  const [isDebugMode, setIsDebugMode] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const generatePrompt = async () => {
@@ -47,11 +47,19 @@ const Chat = (props: Chat) => {
       .then(response => response.json())
       .catch(error => console.error(error));
 
+    setIsTyping(false);
+
+    if (!response) {
+      return;
+    } else if (response.error) {
+      console.error(response.error);
+      return;
+    }
+
     if (!response.message.choices[0].message) {
       return;
     }
 
-    setIsTyping(false);
     const { role, content } = response.message.choices[0].message;
     messages = [...response.history, { role, content }];
     setChatLog(messages);
@@ -64,7 +72,7 @@ const Chat = (props: Chat) => {
   };
 
   const handleChange = (event: { target: { checked: boolean; }; }) => {
-    setIsPromptHidden(event.target.checked);
+    setIsDebugMode(event.target.checked);
   };
 
   const initDB = async () => {
@@ -141,7 +149,7 @@ const Chat = (props: Chat) => {
             padding={1}
           >
             {chatLog.map((message, index) => (
-              <Grid item key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isPromptHidden ? "hidden" : ""}>
+              <Grid item key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isDebugMode ? "hidden" : ""}>
                 {message.role === ChatCompletionRequestMessageRoleEnum.User ? userBubble(message.content) : assistantBubble(message.content)}
               </Grid>
             ))}
@@ -168,8 +176,8 @@ const Chat = (props: Chat) => {
               <Button variant="contained" onClick={generatePrompt}>Send</Button>
             </Grid>
             {/* <Grid item xs={1}>
-            <Checkbox checked={isPromptHidden} onChange={handleChange} />
-            {!isPromptHidden ? null : <Button variant="contained" onClick={initDB}>initDB</Button>}
+            <Checkbox checked={isDebugMode} onChange={handleChange} />
+            {!isDebugMode ? null : <Button variant="contained" onClick={initDB}>initDB</Button>}
           </Grid> */}
           </Grid>
           <div className={styles.subChat}>Powered by GPT3.5</div>
