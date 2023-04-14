@@ -20,7 +20,6 @@
   bottom: 70px;
   right: 0;
   border-radius: 5px;
-  padding: 10px;
   margin: 1rem;
   z-index: 1000;
 }
@@ -40,12 +39,14 @@
   margin: 10px;
   max-width: 395px;
   word-wrap: break-word;
-  background-color: #123123;
+  background-color: #e4e2e0;
   text-align: end;
+  color: rgb(39, 39, 39);
 }
 
 .chatMessage {
-  margin: 5px;
+  margin: 15px;
+  margin-right: 20px;
 }
 
 .chatLog {
@@ -58,7 +59,7 @@
 
 /* width */
 .chatLog::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 
 /* Track */
@@ -74,6 +75,24 @@
 /* Handle on hover */
 .chatLog::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.chatHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  height: 50px;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 30px;
+}
+
+.chatAssistant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }
 
 .fab {
@@ -101,6 +120,11 @@
   min-height: 350px;
 }
 
+.catalogImg {
+  max-height: 250px;
+  margin-bottom: 20px;
+}
+
 .catalogItems {
   display: flex;
   flex-direction: row;
@@ -125,7 +149,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 250px;
+  width: 220px;
 }
 
 .divider {
@@ -138,6 +162,11 @@
 
 .searchBar {
   color: #ffffff;
+}
+
+.headerText {
+  font-size: 18px;
+  margin-left: 6px;
 }
 
 .carousel {

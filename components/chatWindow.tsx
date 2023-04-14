@@ -5,13 +5,17 @@ import styles from '@/styles/Home.module.css';
 import Chat from './chat';
 
 const ChatWindow = () => {
-  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(true);
+
+  const handleChatWindow = () => {
+    setIsChatOpen(!isChatOpen)
+  };
 
   return (
     <>
-      {isChatOpen && <Chat />}
+      {isChatOpen && <Chat minimize={handleChatWindow} />}
       <div className={styles.fab}>
-        <Fab color="primary" aria-label="chat" onClick={() => { setIsChatOpen(!isChatOpen) }}>
+        <Fab color="primary" aria-label="chat" onClick={handleChatWindow}>
           <ChatIcon />
         </Fab>
       </div>

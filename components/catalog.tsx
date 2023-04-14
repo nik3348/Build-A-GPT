@@ -15,7 +15,7 @@ const Item = (props: { item: Item }) => {
         src={`${props.item.img}`}
         alt={props.item.title}
         loading='lazy'
-        style={{ maxHeight: '200px', marginBottom: '20px' }}
+        className={styles.catalogImg}
       />
       <h2 className={styles.text}>{props.item.title}</h2>
       <h4 className={styles.text}>{props.item.author}</h4>
