@@ -7,6 +7,7 @@
   min-height: 100vh;
   max-width: 1200px;
   margin: 0 auto;
+  color: #fff;
 }
 
 .chat {
@@ -28,20 +29,22 @@
   border-radius: 5px;
   padding: 12px;
   margin: 10px;
-  max-width: 395px;
+  max-width: 320px;
   word-wrap: break-word;
   background-color: rgb(39, 39, 39);
+  color: '#ffffff'
 }
 
 .chatBubbleUser {
   border-radius: 5px;
   padding: 12px;
   margin: 10px;
-  max-width: 395px;
+  max-width: 380px;
   word-wrap: break-word;
   background-color: #e4e2e0;
   text-align: end;
   color: rgb(39, 39, 39);
+  color: '#000000'
 }
 
 .chatMessage {
@@ -53,7 +56,7 @@
   overflow: scroll;
   overflow-x: hidden;
   margin: 5px;
-  margin-right: auto;
+  margin-right: 13px;
   height: 500px;
 }
 
@@ -85,7 +88,7 @@
   width: 100%;
   justify-content: flex-end;
   align-items: center;
-  padding-right: 30px;
+  padding-right: 3px;
 }
 
 .chatAssistant {
@@ -94,6 +97,19 @@
   justify-content: center;
   flex: 1;
 }
+
+.assistantIcon {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+  font-size: 10px;
+  width: 100%;
+}
+
 
 .fab {
   position: fixed;
@@ -437,7 +453,7 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   .vercelLogo {
     filter: invert(1);
   }

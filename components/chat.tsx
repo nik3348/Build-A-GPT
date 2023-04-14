@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { Grid, Button, InputBase, IconButton } from '@mui/material';
 import ReactMarkdown from 'react-markdown';
 import { ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from "openai";
@@ -20,12 +20,22 @@ const Chat = (props: Chat) => {
   const [chatLog, setChatLog] = useState<ChatCompletionRequestMessage[]>(defaultMessages);
   const [chatBox, setChatBox] = useState<string>("");
   const [isPromptHidden, setIsPromptHidden] = useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const generatePrompt = async () => {
-    const clientMessage: ChatCompletionRequestMessage = { role: ChatCompletionRequestMessageRoleEnum.User, content: chatBox };
+    const message = chatBox.trim();
+    if (!message) {
+      return;
+    }
+
+    const clientMessage: ChatCompletionRequestMessage = { role: ChatCompletionRequestMessageRoleEnum.User, content: message };
     let messages: ChatCompletionRequestMessage[] = [...chatLog, clientMessage];
     setChatLog(messages);
     setChatBox("");
+
+    setTimeout(() => {
+      setIsTyping(true);
+    }, 1000);
 
     const response = await fetch('/api/chat', {
       method: 'POST',
@@ -41,6 +51,7 @@ const Chat = (props: Chat) => {
       return;
     }
 
+    setIsTyping(false);
     const { role, content } = response.message.choices[0].message;
     messages = [...response.history, { role, content }];
     setChatLog(messages);
@@ -71,7 +82,7 @@ const Chat = (props: Chat) => {
     return (
       <div className={styles.chatHeader}>
         <div className={styles.chatAssistant}>
-          <span style={{ color: 'green', marginRight: '5px' }}>● </span>Maya
+          <span style={{ color: 'green', marginRight: '5px' }}>● </span>Maya (Online)
         </div>
         <IconButton aria-label="close" style={{ color: 'white' }} onClick={props.minimize}>
           <CloseIcon />
@@ -80,11 +91,11 @@ const Chat = (props: Chat) => {
     );
   };
 
-  const ChatLog = () => {
-    const assistantBubble = (message: string) => {
-      return (
-        <Grid container>
-          <Grid item xs={2} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+  const assistantBubble = (message: string) => {
+    return (
+      <Grid container>
+        <Grid item xs={2} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className={styles.assistantIcon}>
             <Image
               src="/maya.svg"
               alt="MayaIcon"
@@ -92,46 +103,26 @@ const Chat = (props: Chat) => {
               height={50}
               priority
             />
-          </Grid>
-          <Grid item xs={10}>
-            <div>
-              <div className={styles.chatBubbleAssistant}>
-                <ReactMarkdown>
-                  {message}
-                </ReactMarkdown>
-              </div>
-            </div>
-          </Grid>
+            Maya (Sales Assistant)
+          </div>
         </Grid>
-      );
-    };
+        <Grid item>
+          <div className={styles.chatBubbleAssistant}>
+            <ReactMarkdown>
+              {message}
+            </ReactMarkdown>
+          </div>
+        </Grid>
+      </Grid>
+    );
+  };
 
-    const userBubble = (message: string) => {
-      return (
-        <div className={styles.chatBubbleUser}>
-          <ReactMarkdown>
-            {message}
-          </ReactMarkdown>
-        </div>
-      );
-    };
-
+  const userBubble = (message: string) => {
     return (
-      <div className={styles.chatLog}>
-        <Grid
-          container
-          rowSpacing={1}
-          direction='column'
-          justifyContent='end'
-          alignItems='flex-end'
-          padding={1}
-        >
-          {chatLog.map((message, index) => (
-            <Grid item key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isPromptHidden ? "hidden" : ""}>
-              {message.role === ChatCompletionRequestMessageRoleEnum.User ? userBubble(message.content) : assistantBubble(message.content)}
-            </Grid>
-          ))}
-        </Grid>
+      <div className={styles.chatBubbleUser}>
+        <ReactMarkdown>
+          {message}
+        </ReactMarkdown>
       </div>
     );
   };
@@ -140,7 +131,23 @@ const Chat = (props: Chat) => {
     <>
       <div className={styles.chat}>
         <ChatHeader />
-        <ChatLog />
+        <div className={styles.chatLog}>
+          <Grid
+            container
+            rowSpacing={1}
+            direction='column'
+            justifyContent='end'
+            alignItems='flex-end'
+            padding={1}
+          >
+            {chatLog.map((message, index) => (
+              <Grid item key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isPromptHidden ? "hidden" : ""}>
+                {message.role === ChatCompletionRequestMessageRoleEnum.User ? userBubble(message.content) : assistantBubble(message.content)}
+              </Grid>
+            ))}
+            {isTyping && assistantBubble('Typing...')}
+          </Grid>
+        </div>
         <div className={styles.chatMessage}>
           <Grid container spacing={1}>
             <Grid item xs={10}>
