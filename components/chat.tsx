@@ -49,14 +49,10 @@ const Chat = (props: Chat) => {
 
     setIsTyping(false);
 
-    if (!response) {
+    if (!response || !response.message.choices[0].message) {
       return;
     } else if (response.error) {
       console.error(response.error);
-      return;
-    }
-
-    if (!response.message.choices[0].message) {
       return;
     }
 
@@ -148,7 +144,7 @@ const Chat = (props: Chat) => {
             alignItems='flex-end'
             padding={1}
           >
-            {chatLog.map((message, index) => (
+            {chatLog.filter((x) => x.content !== null && x.role !== ChatCompletionRequestMessageRoleEnum.Function).map((message, index) => (
               <Grid item key={index} className={message.role === ChatCompletionRequestMessageRoleEnum.System && !isDebugMode ? "hidden" : ""}>
                 {message.role === ChatCompletionRequestMessageRoleEnum.User ? userBubble(message.content) : assistantBubble(message.content)}
               </Grid>
